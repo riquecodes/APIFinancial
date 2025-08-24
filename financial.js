@@ -14,10 +14,11 @@ app.post("/creditos", (req, resp) => {
 
     validateData(data);
 
-    verifyCreditModality(data);
+    const loans = verifyCreditModality(data);
+
     const response = {
       customer: data.name,
-      loans: verifyCreditModality(data),
+      loans: loans,
     };
 
     return resp.status(200).send(response);
@@ -34,10 +35,6 @@ function requiredFields(data) {
   const required = ["name", "age", "cpf", "income", "location"];
   const missing = required.filter((field) => !data.hasOwnProperty(field));
 
-  if (missing.length === required.length) {
-    throw new Error("Dados não fornecidos.");
-  }
-
   if (missing.length > 0) {
     throw new Error (`Preencha todos os campos obrigatórios. Campos ausentes: ${missing.join(", ")}`);
   }
@@ -46,15 +43,15 @@ function requiredFields(data) {
 }
 
 function validateData(data) {
-  if (data.age < 0) {
-    throw new Error("A idade deve ser um número positivo.");
+  if (data.age < 18) {
+    throw new Error("O cliente deve ser maior de idade.");
   };
 
   if (data.cpf.length !== 11) {
     throw new Error("O CPF deve conter 11 dígitos.");
   }
 
-  if (data.income < 2999) {
+  if (data.income <= 2999) {
     throw new Error("A renda deve ser maior que R$ 2999.");
   }
 }
@@ -68,20 +65,27 @@ function verifyCreditModality(data) {
       interest_rate: 4,
     })
   }
-
+  
   if (consignmentRules(data)) {
     loans.push({
       type: "CONSIGNMENT",
       interest_rate: 2,
     });
   }
-
+  
   if (guaranteedRules(data)) {
     loans.push({
       type: "GUARANTEED",
       interest_rate: 3,
     });
   }
+
+  if (loans.length === 0) {
+    return {
+      msg: "Nenhum tipo de crédito disponível para o cliente."
+    };
+  }
+  
   return loans;
 }
 
@@ -103,7 +107,7 @@ const consignmentRules = (data) => {
 }
 
 const guaranteedRules = (data) => {
-  if (personalRules(data)) {
+  if (data.age >= 45 && data.location === "PR" && data.income >= 8000) {
     return true;
   }
   return false;
