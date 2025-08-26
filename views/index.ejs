@@ -13,11 +13,16 @@
   <h2>Simule seu Crédito</h2>
 
   <form id="creditForm">
-    <label>Nome: <input type="text" name="name" required></label><br>
-    <label>Idade: <input type="number" name="age" required></label><br>
-    <label>CPF: <input type="text" name="cpf" required></label><br>
-    <label>Salário: <input type="number" name="income" required></label><br>
-    <label>Localização: <input type="text" name="location" required></label><br>
+    <label for="name">Nome: </label>
+    <input type="text" id="name" required><br>
+    <label for="age">Idade: </label>
+    <input type="number" id="age" required><br>
+    <label for="cpf">CPF: </label>
+    <input type="text" id="cpf" required><br>
+    <label for="income">Salário: </label>
+    <input type="number" id="income" required><br>
+    <label id="location">Localização: </label>
+    <input type="text" id="location" required><br>
     <button type="submit">Simular</button>
   </form>
 
