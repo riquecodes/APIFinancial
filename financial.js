@@ -24,8 +24,6 @@ app.post("/creditos", async (req, resp) => {
     requiredFields(data); 
     validateData(data);
 
-    console.log("Executando SELECT");
-
     const [rows] = await pool.query(`SELECT * FROM clientes WHERE cpf = ?`, [
       data.cpf,
     ]);
@@ -44,11 +42,6 @@ app.post("/creditos", async (req, resp) => {
         [data.name, data.age, data.cpf, data.income, data.location]
       );
     }
-
-    console.log("final banco");
-
-    console.log("Dados recebidos:", data);
-    console.log("Empréstimos liberados:", verifyCreditModality(data));
 
     const loans = verifyCreditModality(data);
 
@@ -87,8 +80,8 @@ function requiredFields(data) {
 }
 
 function validateData(data) {
-  if (data.age < 0) {
-    throw new Error("A idade deve ser um número positivo.");
+  if (data.age < 18) {
+    throw new Error("O cliente deve ser maior de idade.");
   }
 
   if (data.cpf.length !== 11) {
