@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Resultado do Crédito</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <%- include('partials/header') %>
+
+  <h2>Resultado do Crédito</h2>
+
+  <div id="resultContainer"></div>
+
+  <script>
+    const resultDiv = document.getElementById('resultContainer');
+    const data = JSON.parse(sessionStorage.getItem('resultData'));
+
+    if (!data) {
+      resultDiv.innerHTML = '<p>Nenhum resultado disponível.</p>';
+    } else if (data.loans && data.loans.length > 0) {
+      let html = `<p>Cliente: ${data.customer}</p>`;
+      html += '<ul>';
+      data.loans.forEach(loan => {
+        html += `<li>Tipo: ${loan.type} - Taxa de juros: ${loan.interest_rate}%</li>`;
+      });
+      html += '</ul>';
+      resultDiv.innerHTML = html;
+    } else {
+      resultDiv.innerHTML = `<p>O cliente não se qualifica para nenhuma modalidade de crédito.</p>`;
+    }
+
+    // Limpa os dados do sessionStorage para não reutilizar
+    sessionStorage.removeItem('resultData');
+  </script>
+
+  <!-- Footer -->
+  <%- include('partials/footer') %>
+
+</body>
+</html>

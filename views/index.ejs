@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulador de Crédito</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  
+  <%- include('partials/header') %>
+
+  <h2>Simule seu Crédito</h2>
+
+  <form id="creditForm">
+    <label>Nome: <input type="text" name="name" required></label><br>
+    <label>Idade: <input type="number" name="age" required></label><br>
+    <label>CPF: <input type="text" name="cpf" required></label><br>
+    <label>Salário: <input type="number" name="income" required></label><br>
+    <label>Localização: <input type="text" name="location" required></label><br>
+    <button type="submit">Simular</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById("creditForm");
+    const resultDiv = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      try {
+        const res = await fetch("/creditos", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        
+        if (result.customer) {
+          result.customer = result.customer.charAt(0).toUpperCase() + result.customer.slice(1).toLowerCase();
+        }
+
+        sessionStorage.setItem('resultData', JSON.stringify(result));
+        window.location.href = '/result';
+      } catch (error) {
+        resultDiv.innerHTML = `<p>Ocorreu um erro: ${error.message}</p>`;
+      }
+    });
+  </script>
+
+ 
+  <%- include('partials/footer') %>
+
+</body>
+</html>
