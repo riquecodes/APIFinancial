@@ -32,11 +32,11 @@ function personalRules(data) {
 }
 
 function consignmentRules(data) {
-  return data.income >= 5000;
+  return data.income >= 5000 && data.age >= 30 && data.age < 45;
 }
 
 function guaranteedRules(data) {
-  return personalRules(data);
+  return data.income >= 8000 && data.age >= 45;
 }
 
 module.exports = { requiredFields, validateData, verifyCreditModality };
