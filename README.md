@@ -64,8 +64,8 @@ Reusable components included in all views.
 
 ## 🛠️ How to Run Locally
 ```
-git clone https://github.com/your-username/credit-analysis-app.git
-cd credit-analysis-app
+git clone https://github.com/your-username/APIFinancial.git
+cd APIFinancial
 npm install
 npm start
 ```
